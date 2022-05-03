@@ -13,6 +13,7 @@ namespace Project_2
             {
                 var objEnemy = enemy.GetComponent<Enemy_3>();
                 objEnemy.OnDestroy();
+                Destroy(enemy);
                 Destroy(gameObject);
             }
         }

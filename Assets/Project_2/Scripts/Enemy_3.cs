@@ -11,14 +11,15 @@ namespace Project_2
         [SerializeField] private Transform _spawnPosition;
         [SerializeField] private float _rotateSpeed;
         [SerializeField] private float _speed;
+        public float durability = 150f;
         private bool buttonClick;
         private int numb;
-        
+
         void Start()
         {
-            _speed = 10f;
+            _speed = 20f;
             numb = 0;
-            _rotateSpeed = 3f;
+            _rotateSpeed = 4f;
             _player = FindObjectOfType<Player>();
         }
 
@@ -27,7 +28,7 @@ namespace Project_2
             if (Vector3.Distance(transform.position, _player.transform.position) < 30)
             {
                 numb += 1;
-                if(numb % 80 == 0)
+                if (numb % 80 == 0)
                     buttonClick = true;
             }
         }
@@ -51,7 +52,7 @@ namespace Project_2
         {
             var bulletObj = Instantiate(_bulletPrefab, _spawnPosition.position, _spawnPosition.rotation);
             var bullet = bulletObj.GetComponent<Bullet>();
-            bullet.Init(_player.transform,10,40f);
+            bullet.Init(_player.transform, 10, 40f);
         }
         public void OnDestroy()
         {

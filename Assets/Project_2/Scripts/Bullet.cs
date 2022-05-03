@@ -24,10 +24,13 @@ namespace Project_2
 
         private void OnCollisionEnter(Collision collision)
         {
-            if(collision.gameObject.TryGetComponent(out Itakedemage takeDemage))
+            if (collision.gameObject.TryGetComponent(out Itakedemage takeDemage))
             {
                 takeDemage.Hit(_demage);
-                Destroy(gameObject);
+                if (collision.gameObject.CompareTag("Player"))
+                {
+                    Destroy(gameObject);
+                }
 
             }
         }

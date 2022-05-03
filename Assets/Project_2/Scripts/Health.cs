@@ -7,16 +7,13 @@ namespace Project_2
     public class Health : MonoBehaviour
     {
         public GameObject player;
-        private void OnTriggerStay(Collider other)
+        private void OnCollisionEnter(Collision collision)
         {
-            if (other.CompareTag("Player"))
+            if (collision.gameObject.CompareTag("Player"))
             {
-                if (Input.GetKeyDown(KeyCode.E))
-                {
                     var healthpoints = player.GetComponent<Player>();
                     healthpoints._durability += 20;
                     Destroy(gameObject);
-                }
             }
         }
     }

@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Shield
   - Enemy_3
+  - Walls
+  - Table
+  - Mine
   layers:
   - Default
   - TransparentFX
