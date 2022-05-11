@@ -10,24 +10,16 @@ namespace Project_2
         private bool _isStopped;
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player") && !_isStopped)
+            if (other.CompareTag("Player")||other.CompareTag("Guard") && !_isStopped)
             {
                 _rotatePoint.Rotate(Vector3.up, 90);
             }
         }
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Player") && !_isStopped)
+            if (other.CompareTag("Player") || other.CompareTag("Guard") && !_isStopped)
             {
                 _rotatePoint.Rotate(Vector3.up, -90);
-            }
-        }
-        private void OnTriggerStay(Collider other)
-        {
-            if (other.CompareTag("Player"))
-            {
-                if (Input.GetKeyDown(KeyCode.E))
-                    _isStopped = true;
             }
         }
     }

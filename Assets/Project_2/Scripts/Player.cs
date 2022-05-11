@@ -10,8 +10,9 @@ namespace Project_2
     {
         public GameObject enemy;
         public GameObject shieldPrefab;
+        public bool _keyen;
         [SerializeField] private GameObject _granadePrefab;
-        [SerializeField] private float _jumpForce = 50f;
+        [SerializeField] private float _jumpForce = 500f;
         public Transform spawnPosition;
         [SerializeField] private Rigidbody _rb;
         [HideInInspector] public int level = 1;
@@ -24,9 +25,19 @@ namespace Project_2
         private bool _isSpawnShield;
         private float _cfSpeed = 1f;
         private float _sprint;
+        private bool is_ground;
 
         public float speed = 1f;
 
+
+        private void OnTriggerStay(Collider col)
+        {               //если в тригере что то есть и у обьекта тег "ground"
+            if (col.tag == "floor") is_ground = true;      //то включаем переменную "на земле"
+        }
+        private void OnTriggerExit(Collider col)
+        {              //если из триггера что то вышло и у обьекта тег "ground"
+            if (col.tag == "floor") is_ground = false;     //то вџключаем переменную "на земле"
+        }
         private void Awake()
         {
             _rb = GetComponent<Rigidbody>();
@@ -53,8 +64,11 @@ namespace Project_2
                 _isGran = true;
             }
 
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Space) && is_ground)
+            {
                 GetComponent<Rigidbody>().AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+            }
+
 
         }
 
@@ -87,11 +101,10 @@ namespace Project_2
         //private void Move(float delta)
         //{
         //    var fixedDirection = transform.TransformDirection(_direction.normalized);
-            
+
         //    transform.position += fixedDirection * _sprint * delta;
         //}
-
-        public void Init(float durability)
+            public void Init(float durability)
         {
             _durability = durability;
             Destroy(gameObject, 5f);
@@ -102,15 +115,18 @@ namespace Project_2
             if (_durability <= 0)
             {
                 Destroy(gameObject);
-                var objEnemy = enemy.GetComponent<Enemy_3>();
-                objEnemy.OnDestroy();
+                if (enemy != null)
+                {
+                    var objEnemy = enemy.GetComponent<Enemy_3>();
+                    objEnemy.OnDestroy();
+                }
             }
         }
         private void FireG()
         {
             var granObj = Instantiate(_granadePrefab, spawnPosition.position, spawnPosition.rotation);
             var gran = granObj.GetComponent<Granade>();
-            gran.Init(gameObject.transform, 5f, 30f);
+            gran.Init(gameObject.transform, 5f, 10f);
         }
     }
 }

@@ -33,12 +33,22 @@ namespace Project_2
                         Collider[] _col = Physics.OverlapSphere(_hit.point, 40);
                         foreach (var col in _col)
                         {
-                            col.gameObject.AddComponent<Rigidbody>();
-                                col.attachedRigidbody.AddForce(-(_hit.point - col.transform.position) * 1000);
+                            if (!col.gameObject.CompareTag("floor"))
+                            {
+                                col.gameObject.AddComponent<Rigidbody>();
+                                if(col.attachedRigidbody)
+                                col.attachedRigidbody.
+                                AddForce(-(_hit.point - col.transform.position) * 1000);
                                 var objEnemy = _em.GetComponent<Enemy_3>();
                                 objEnemy.OnDestroy();
                                 if (i != null)
-                                Destroy(i);
+                                    Destroy(i);
+                            }
+                            else
+                            {
+                                if (i != null)
+                                    Destroy(i);
+                            }
                         }
                     }
                 }
@@ -54,10 +64,18 @@ namespace Project_2
                         Collider[] _col = Physics.OverlapSphere(_hit.point, 40);
                         foreach (var col in _col)
                         {
-                            col.gameObject.AddComponent<Rigidbody>();
-                            col.attachedRigidbody.AddForce(-(_hit.point - col.transform.position) * 1000);
-                            if (i != null)
-                                Destroy(i);
+                            if (!col.gameObject.CompareTag("floor"))
+                            {
+                                col.gameObject.AddComponent<Rigidbody>();
+                                col.attachedRigidbody.AddForce(-(_hit.point - col.transform.position) * 1000);
+                                if (i != null)
+                                    Destroy(i);
+                            }
+                            else
+                            {
+                                if (i != null)
+                                    Destroy(i);
+                            }
                         }
                     }
                 }
@@ -71,10 +89,19 @@ namespace Project_2
                         Collider[] _col = Physics.OverlapSphere(_hit.point, 40);
                     foreach (var col in _col)
                     {
-                        col.gameObject.AddComponent<Rigidbody>();
-                        col.attachedRigidbody.AddForce(-(_hit.point - col.transform.position) * 1000);
-                        if (i != null)
-                            Destroy(i);
+                        if (!col.gameObject.CompareTag("floor") )
+                        {
+                            col.gameObject.AddComponent<Rigidbody>();
+                            col.attachedRigidbody.AddForce(-(_hit.point - col.transform.position) * 1000);
+                            if (i != null)
+                                Destroy(i);
+                        }
+                        else
+                        {
+
+                            if (i != null)
+                                Destroy(i);
+                        }
                     }
                 }
             }

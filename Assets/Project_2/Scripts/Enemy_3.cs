@@ -19,7 +19,7 @@ namespace Project_2
         {
             _speed = 20f;
             numb = 0;
-            _rotateSpeed = 4f;
+            _rotateSpeed = 5f;
             _player = FindObjectOfType<Player>();
         }
 
@@ -28,7 +28,7 @@ namespace Project_2
             if (Vector3.Distance(transform.position, _player.transform.position) < 30)
             {
                 numb += 1;
-                if (numb % 80 == 0)
+                if (numb % 100 == 0)
                     buttonClick = true;
             }
         }
@@ -52,7 +52,7 @@ namespace Project_2
         {
             var bulletObj = Instantiate(_bulletPrefab, _spawnPosition.position, _spawnPosition.rotation);
             var bullet = bulletObj.GetComponent<Bullet>();
-            bullet.Init(_player.transform, 10, 40f);
+            bullet.Init(_player.transform, 10, 30f);
         }
         public void OnDestroy()
         {

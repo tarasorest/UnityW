@@ -9,6 +9,8 @@ TagManager:
   - Walls
   - Table
   - Mine
+  - floor
+  - Guard
   layers:
   - Default
   - TransparentFX

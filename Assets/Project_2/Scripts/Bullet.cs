@@ -27,7 +27,7 @@ namespace Project_2
             if (collision.gameObject.TryGetComponent(out Itakedemage takeDemage))
             {
                 takeDemage.Hit(_demage);
-                if (collision.gameObject.CompareTag("Player"))
+                if (collision.gameObject.CompareTag("Player")!=null)
                 {
                     Destroy(gameObject);
                 }

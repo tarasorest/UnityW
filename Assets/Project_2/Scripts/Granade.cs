@@ -6,7 +6,7 @@ namespace Project_2
 {
     public class Granade : MonoBehaviour
     {
-        [SerializeField] private float _demage = 15f;
+        [SerializeField] private float _demage = 30f;
         private Transform _target;
         private float _speed;
         public void Init(Transform target, float lifeTime, float speed)
@@ -31,6 +31,15 @@ namespace Project_2
                 if(wer.durability <= 0)
                 {
                     Destroy(wer.gameObject);
+                }
+            }else if (collision.gameObject.GetComponent<Guardian>())
+            {
+                var ver = collision.gameObject.GetComponent<Guardian>();
+                Destroy(gameObject);
+                ver.durability -= _demage;
+                if (ver.durability <= 0)
+                {
+                    Destroy(ver.gameObject);
                 }
             }
         }
