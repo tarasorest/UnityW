@@ -23,8 +23,8 @@ namespace Project_2
         private void Update()
         {
             Ray ray = new Ray(_spawnPosition.position, transform.forward);
-            Debug.DrawRay(_spawnPosition.position, transform.forward * 50, Color.red);
-            if (Physics.Raycast(ray, out RaycastHit hit,50))
+            Debug.DrawRay(_spawnPosition.position, transform.forward * 60, Color.red);
+            if (Physics.Raycast(ray, out RaycastHit hit,60))
             {
                 Debug.DrawRay(_spawnPosition.position, transform.forward * hit.distance, Color.red);
                 if (_player != null)
@@ -35,16 +35,16 @@ namespace Project_2
                         gameObject.GetComponent<WayPointScript>().enabled = false;
                         gameObject.GetComponent<WayScript>().enabled = true;
                         numb += 1;
-                        if (numb % 30 == 0)
+                        if (numb % 50 == 0)
                             Fire();
 
                     }
-                    else if (!hit.collider.CompareTag("Player")&&uhit&& Vector3.Distance(transform.position, _player.transform.position) > 15)
+                    else if (!hit.collider.CompareTag("Player")&&uhit&& Vector3.Distance(transform.position, _player.transform.position) > 20)
                     {
                         uhit = false;
                         StartCoroutine(pause());
                     }
-                    else if (!hit.collider.CompareTag("Player") && uhit&& Vector3.Distance(transform.position, _player.transform.position) <= 15)
+                    else if (!hit.collider.CompareTag("Player") && uhit&& Vector3.Distance(transform.position, _player.transform.position) <= 20)
                     {
                         uhit = false;
                         gameObject.GetComponent<WayPointScript>().enabled = false;
@@ -63,7 +63,7 @@ namespace Project_2
         {
             var bulletObj = Instantiate(_bulletPrefab, _spawnPosition.position, _spawnPosition.rotation);
             var bullet = bulletObj.GetComponent<Bullet>();
-            bullet.Init(_player.transform, 10, 70f);
+            bullet.Init(_player.transform, 10, 50f);
         }
         public void OnDestroy()
         {

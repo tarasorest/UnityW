@@ -18,7 +18,7 @@ namespace Project_2
         [HideInInspector] public int level = 1;
         [SerializeField] private float _buttonsspeedRotate;
         [SerializeField] private float _mousespeedRotate = 300f;
-        public float _durability = 30f;
+        public float _durability = 100f;
         private Vector3 _direction;
         private bool _isSprint;
         private bool _isGran;
@@ -26,8 +26,11 @@ namespace Project_2
         private float _cfSpeed = 1f;
         private float _sprint;
         private bool is_ground;
+        [SerializeField] private Animator _anim;
+        private readonly int IsWalking = Animator.StringToHash("IsWalking");
+        private readonly int IsShield = Animator.StringToHash("IsShield");
+        public float speed =10f;
 
-        public float speed = 1f;
 
 
         private void OnTriggerStay(Collider col)
@@ -40,13 +43,26 @@ namespace Project_2
         }
         private void Awake()
         {
+            _anim = GetComponent<Animator>();
             _rb = GetComponent<Rigidbody>();
         }
         void Update()
         {
 
             if (Input.GetMouseButtonDown(1))
+            {
+                _anim.SetBool(IsShield, true);
                 _isSpawnShield = true;
+            }
+
+            if(GameObject.FindWithTag("Shield"))
+            {
+                _anim.SetBool(IsShield, true);
+            }
+            else
+            {
+                _anim.SetBool(IsShield, false);
+            }
 
             _direction.x = Input.GetAxis("Horizontal");
             _direction.z = Input.GetAxis("Vertical");
@@ -58,6 +74,7 @@ namespace Project_2
             _rb.MovePosition(transform.position + _direction.normalized * speed * _sprint * _cfSpeed * Time.fixedDeltaTime);
             Vector3 rotate = new Vector3(0, Input.GetAxis("Mouse X") * _mousespeedRotate * Time.fixedDeltaTime, 0);
             _rb.MoveRotation(_rb.rotation * Quaternion.Euler(rotate));
+            _anim.SetBool(IsWalking, _direction != Vector3.zero);
 
             if (Input.GetKeyDown(KeyCode.G))
             {
@@ -82,7 +99,9 @@ namespace Project_2
             if (_isSpawnShield)
             {
                 _isSpawnShield = false;
+               
                 SpawnShield();
+                _anim.SetBool(IsShield, true);
             }
 
             //Move(Time.fixedDeltaTime);
@@ -95,7 +114,7 @@ namespace Project_2
             var shieldObj = Instantiate(shieldPrefab, spawnPosition.position, spawnPosition.rotation);
             var shield = shieldObj.GetComponent<Shield>();
             shield.Init(10 * level);
-
+            
             shield.transform.SetParent(spawnPosition);
         }
         //private void Move(float delta)
@@ -126,7 +145,7 @@ namespace Project_2
         {
             var granObj = Instantiate(_granadePrefab, spawnPosition.position, spawnPosition.rotation);
             var gran = granObj.GetComponent<Granade>();
-            gran.Init(gameObject.transform, 5f, 10f);
+            gran.Init(gameObject.transform, 5f, 15f);
         }
     }
 }
