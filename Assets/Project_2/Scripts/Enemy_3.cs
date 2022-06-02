@@ -1,6 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Project_2
 {
@@ -10,26 +14,47 @@ namespace Project_2
         [SerializeField] private GameObject _bulletPrefab;
         [SerializeField] private Transform _spawnPosition;
         [SerializeField] private float _rotateSpeed;
-        [SerializeField] private float _speed;
-        public float durability = 150f;
+        [SerializeField] private GameObject _compl;
+        public float _speed;
+        public float _bulspeed;
+        public float durability;
         private bool buttonClick;
         private int numb;
 
 
+
         void Start()
         {
-            _speed = 20f;
             numb = 0;
-            _rotateSpeed = 5f;
+            _rotateSpeed = 15f;
             _player = FindObjectOfType<Player>();
+            
         }
 
         void Update()
         {
+            if (_compl.GetComponent<NewBehaviourScript>().num == 0)
+            {
+                durability = 350f;
+                _speed = 150f;
+                _bulspeed = 160f;
+            }
+            else if (_compl.GetComponent<NewBehaviourScript>().num == 1)
+            {
+                durability = 250f;
+                _speed = 100f;
+                _bulspeed = 140f;
+            }
+            else if (_compl.GetComponent<NewBehaviourScript>().num == 2)
+            {
+                durability = 150f;
+                _speed = 50f;
+                _bulspeed = 120f;
+            }
             if (Vector3.Distance(transform.position, _player.transform.position) < 30)
             {
                 numb += 1;
-                if (numb % 30 == 0)
+                if (numb % 40 == 0)
                     buttonClick = true;
             }
         }
@@ -41,20 +66,13 @@ namespace Project_2
                 buttonClick = false;
                 Fire();
             }
-            var direction = _player.transform.position - transform.position;
-            var stepRotate = Vector3.RotateTowards(transform.forward,
-                direction,
-                _rotateSpeed * Time.fixedDeltaTime,
-                0f);
-            transform.rotation = Quaternion.LookRotation(stepRotate);
-            if(Vector3.Distance(transform.position, _player.transform.position) >= 5)
-            transform.position += transform.forward * _speed * Time.fixedDeltaTime;
+            gameObject.GetComponent<WayScript>().enabled = true;
         }
         private void Fire()
         {
             var bulletObj = Instantiate(_bulletPrefab, _spawnPosition.position, _spawnPosition.rotation);
             var bullet = bulletObj.GetComponent<Bullet>();
-            bullet.Init(_player.transform, 10, 50f);
+            bullet.Init(_player.transform, 10, _bulspeed);
         }
         public void OnDestroy()
         {

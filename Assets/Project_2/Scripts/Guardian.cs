@@ -10,9 +10,13 @@ namespace Project_2
         [SerializeField] private Player _player;
         [SerializeField] private GameObject _bulletPrefab;
         [SerializeField] private Transform _spawnPosition;
-        public float durability = 300f;
+        [SerializeField] private GameObject _compl;
+        public float durability;
         private int numb;
         private bool uhit;
+        public float _distance;
+        public float _bltspeed;
+
 
         void Start()
         {
@@ -22,9 +26,31 @@ namespace Project_2
 
         private void Update()
         {
+            if (_compl.GetComponent<NewBehaviourScript>().num == 0)
+            {
+                durability = 500f;
+                _distance = 30f;
+                _bltspeed = 30f;
+                gameObject.GetComponent<NavMeshAgent>().speed = 25f;
+            }
+            else if (_compl.GetComponent<NewBehaviourScript>().num == 1)
+            {
+                durability = 400f;
+                _distance = 25f;
+                _bltspeed = 25f;
+                gameObject.GetComponent<NavMeshAgent>().speed = 20f;
+            }
+            else if (_compl.GetComponent<NewBehaviourScript>().num == 2)
+            {
+                durability = 300f;
+                _distance = 20f;
+                _bltspeed = 20f;
+                gameObject.GetComponent<NavMeshAgent>().speed = 15f;
+            }
+
             Ray ray = new Ray(_spawnPosition.position, transform.forward);
-            Debug.DrawRay(_spawnPosition.position, transform.forward * 60, Color.red);
-            if (Physics.Raycast(ray, out RaycastHit hit,60))
+            Debug.DrawRay(_spawnPosition.position, transform.forward * 70, Color.red);
+            if (Physics.Raycast(ray, out RaycastHit hit,70))
             {
                 Debug.DrawRay(_spawnPosition.position, transform.forward * hit.distance, Color.red);
                 if (_player != null)
@@ -35,16 +61,16 @@ namespace Project_2
                         gameObject.GetComponent<WayPointScript>().enabled = false;
                         gameObject.GetComponent<WayScript>().enabled = true;
                         numb += 1;
-                        if (numb % 50 == 0)
+                        if (numb % 2 == 0)
                             Fire();
 
                     }
-                    else if (!hit.collider.CompareTag("Player")&&uhit&& Vector3.Distance(transform.position, _player.transform.position) > 20)
+                    else if (!hit.collider.CompareTag("Player")&&uhit&& Vector3.Distance(transform.position, _player.transform.position) > _distance)
                     {
                         uhit = false;
                         StartCoroutine(pause());
                     }
-                    else if (!hit.collider.CompareTag("Player") && uhit&& Vector3.Distance(transform.position, _player.transform.position) <= 20)
+                    else if (!hit.collider.CompareTag("Player") && uhit&& Vector3.Distance(transform.position, _player.transform.position) <= _distance)
                     {
                         uhit = false;
                         gameObject.GetComponent<WayPointScript>().enabled = false;
@@ -63,7 +89,7 @@ namespace Project_2
         {
             var bulletObj = Instantiate(_bulletPrefab, _spawnPosition.position, _spawnPosition.rotation);
             var bullet = bulletObj.GetComponent<Bullet>();
-            bullet.Init(_player.transform, 10, 50f);
+            bullet.Init(_player.transform, 10, _bltspeed);
         }
         public void OnDestroy()
         {

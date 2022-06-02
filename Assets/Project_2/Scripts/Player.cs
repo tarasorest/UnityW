@@ -2,22 +2,29 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 namespace Project_2
 {
-    public class Player : MonoBehaviour,Itakedemage
+    public class Player : MonoBehaviour, Itakedemage
     {
         public GameObject enemy;
         public GameObject shieldPrefab;
         public bool _keyen;
         [SerializeField] private GameObject _granadePrefab;
-        [SerializeField] private float _jumpForce = 500f;
+        [SerializeField] private GameObject _db;
+        [SerializeField] private GameObject _ingmenu;
+        [SerializeField] private float _jumpForce = 300f;
         public Transform spawnPosition;
         [SerializeField] private Rigidbody _rb;
+        [SerializeField] private GameObject _pause;
+        [SerializeField] private GameObject _cont;
+        [SerializeField] private GameObject _healthIndic;
         [HideInInspector] public int level = 1;
         [SerializeField] private float _buttonsspeedRotate;
-        [SerializeField] private float _mousespeedRotate = 300f;
+        [SerializeField] private float _mousespeedRotate = 4000f;
         public float _durability = 100f;
         private Vector3 _direction;
         private bool _isSprint;
@@ -29,7 +36,7 @@ namespace Project_2
         [SerializeField] private Animator _anim;
         private readonly int IsWalking = Animator.StringToHash("IsWalking");
         private readonly int IsShield = Animator.StringToHash("IsShield");
-        public float speed =10f;
+        public float speed = 200f;
 
 
 
@@ -55,7 +62,7 @@ namespace Project_2
                 _isSpawnShield = true;
             }
 
-            if(GameObject.FindWithTag("Shield"))
+            if (GameObject.FindWithTag("Shield"))
             {
                 _anim.SetBool(IsShield, true);
             }
@@ -69,11 +76,14 @@ namespace Project_2
             _isSprint = Input.GetButton("Sprint");
 
             _sprint = (_isSprint) ? 2f : 1f;
+            if (Time.timeScale == 1)
+            {
+                _direction = transform.TransformDirection(_direction);
+                GetComponent<Rigidbody>().AddForce(_direction * speed, ForceMode.Impulse);
 
-            _direction = transform.TransformDirection(_direction);
-            _rb.MovePosition(transform.position + _direction.normalized * speed * _sprint * _cfSpeed * Time.fixedDeltaTime);
-            Vector3 rotate = new Vector3(0, Input.GetAxis("Mouse X") * _mousespeedRotate * Time.fixedDeltaTime, 0);
-            _rb.MoveRotation(_rb.rotation * Quaternion.Euler(rotate));
+                Vector3 rotate = new Vector3(0, Input.GetAxis("Mouse X") * _mousespeedRotate * Time.fixedDeltaTime, 0);
+                _rb.MoveRotation(_rb.rotation * Quaternion.Euler(rotate));
+            }
             _anim.SetBool(IsWalking, _direction != Vector3.zero);
 
             if (Input.GetKeyDown(KeyCode.G))
@@ -86,7 +96,8 @@ namespace Project_2
                 GetComponent<Rigidbody>().AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
             }
 
-
+            var a = _healthIndic.GetComponent<HealthIndicator>();
+            a._healthInd = _durability;
         }
 
         private void FixedUpdate()
@@ -99,13 +110,18 @@ namespace Project_2
             if (_isSpawnShield)
             {
                 _isSpawnShield = false;
-               
+
                 SpawnShield();
                 _anim.SetBool(IsShield, true);
             }
-
+            if(gameObject.transform.position.y <= -50)
+            {
+                _pause.SetActive(true);
+                _ingmenu.SetActive(false);
+                _db.SetActive(true);
+            }
             //Move(Time.fixedDeltaTime);
-           
+
             //transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X") * _mousespeedRotate * Time.fixedDeltaTime, 0));
         }
 
@@ -114,7 +130,7 @@ namespace Project_2
             var shieldObj = Instantiate(shieldPrefab, spawnPosition.position, spawnPosition.rotation);
             var shield = shieldObj.GetComponent<Shield>();
             shield.Init(10 * level);
-            
+
             shield.transform.SetParent(spawnPosition);
         }
         //private void Move(float delta)
@@ -123,7 +139,7 @@ namespace Project_2
 
         //    transform.position += fixedDirection * _sprint * delta;
         //}
-            public void Init(float durability)
+        public void Init(float durability)
         {
             _durability = durability;
             Destroy(gameObject, 5f);
@@ -133,19 +149,26 @@ namespace Project_2
             _durability -= demage;
             if (_durability <= 0)
             {
-                Destroy(gameObject);
+                _pause.SetActive(true);
+                _ingmenu.SetActive(false);
+                _db.SetActive(true);
                 if (enemy != null)
                 {
                     var objEnemy = enemy.GetComponent<Enemy_3>();
                     objEnemy.OnDestroy();
                 }
             }
+            else
+            {
+                _pause.SetActive(false);
+                _cont.SetActive(true);
+            }
         }
         private void FireG()
         {
             var granObj = Instantiate(_granadePrefab, spawnPosition.position, spawnPosition.rotation);
             var gran = granObj.GetComponent<Granade>();
-            gran.Init(gameObject.transform, 5f, 15f);
+            gran.Init(gameObject.transform, 5f, 20f);
         }
     }
 }

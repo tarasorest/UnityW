@@ -11,6 +11,9 @@ TagManager:
   - Mine
   - floor
   - Guard
+  - Death
+  - Enemy3
+  - Complexity
   layers:
   - Default
   - TransparentFX
