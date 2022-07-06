@@ -14,11 +14,36 @@ TagManager:
   - Death
   - Enemy3
   - Complexity
+  - Zone
+  - __slider
+  - _sltext
+  - music_created
+  - _ghost
+  - _ghost_text
+  - _garg
+  - _garg_text
+  - _main
+  - _main_text
+  - _steps
+  - _steps_text
+  - _basic_m
+  - _basic_m_text
+  - main
+  - bomb_explosion
+  - garg_shot
+  - ghost_shot
+  - mine_1
+  - mine_2
+  - mine_3
+  - mine_4
+  - mine_5
+  - mine_6
+  - player_drop
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Post_Proc
   - Water
   - UI
   - 

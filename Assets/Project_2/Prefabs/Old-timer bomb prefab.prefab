@@ -225,6 +225,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fe68777e0ce64e4e977a3e74539ebd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  s_enem: {fileID: 7368887406310399326, guid: 1f075ef1fcf905a48a0a7ff89d2d73cc, type: 3}
+  s_drop: {fileID: 2222473515941983667, guid: 0c5717379f723724da57c76a01a0ac77, type: 3}
+  _sparks: {fileID: 2269842382494791166, guid: d5f6e060860346e47a39261e72e980aa, type: 3}
   _demage: 15
 --- !u!65 &4088505000365992744
 BoxCollider:
